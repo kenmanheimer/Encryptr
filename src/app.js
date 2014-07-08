@@ -10,6 +10,8 @@ var Encryptr = (function (window, console, undefined) {
     this.online = true; // assume a hopeful default
   };
 
+  Encryptr.prototype.rootContainerID = "_encryptrIndex";
+
   Encryptr.prototype.init = function() {
     window.document.addEventListener("deviceready", this.onDeviceReady, false);
     window.document.addEventListener("resume", this.onResume, false);

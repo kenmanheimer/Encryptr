@@ -47,10 +47,11 @@
     },
     importBeta2_clickHandler: function(event) {
       event.preventDefault();
-      var _this = this;
+      var _this = this,
+          rootContainerID = window.app.rootContainerID;
       this.dismiss();
       $(".blocker").show();
-      window.app.session.load("_encryptrIndex", function(err, indexContainer) {
+      window.app.session.load(rootContainerID, function(err, indexContainer) {
         window.app.session.load("entries", function(err, container) {
           if (err) {
             $(".blocker").hide();

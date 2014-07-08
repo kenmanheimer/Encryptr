@@ -73,7 +73,8 @@
             session: session
           });
           Backbone.Session = session;
-          window.app.session.create("_encryptrIndex", function(err, entries){
+          var rootContainerID = window.app.rootContainerID;
+          window.app.session.create(rootContainerID, function(err, entries){
             if (err) {
               window.app.dialogAlertView.show({
                 title: "Error",

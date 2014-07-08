@@ -8,7 +8,8 @@
 
   var EntriesCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
-      this.container = options && options.container || "_encryptrIndex"; // default
+      var rootContainerID = window.app.rootContainerID;
+      this.container = options && options.container || rootContainerID;
       this.model = Encryptr.prototype.EntryModel; // default
     },
     fetch: function (options) {

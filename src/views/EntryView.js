@@ -76,8 +76,9 @@
         if (event.type === "dialogAccept") {
           var oldId = _this.model.id;
           var parentCollection = _this.model.collection;
+          var rootContainerID = window.app.rootContainerID;
           _this.model.destroy();
-          window.app.session.load("_encryptrIndex", function(err, container) {
+          window.app.session.load(rootContainerID, function(err, container) {
             if (err) {
               window.app.dialogAlertView.show({
                 title: "Error",

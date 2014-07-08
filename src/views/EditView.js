@@ -77,7 +77,8 @@
       _this.model.save(null, {
         success: function(model) {
           if (indexNeedsUpdate) {
-            window.app.session.load("_encryptrIndex", function(err, container) {
+            var rootContainerID = window.app.rootContainerID;
+            window.app.session.load(rootContainerID, function(err, container) {
               if (err) {
                 window.app.dialogAlertView.show({
                   title: "Error",

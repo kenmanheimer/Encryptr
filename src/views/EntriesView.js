@@ -56,15 +56,16 @@
       this.subViews.push(view);
     },
     viewActivate: function(event) {
-      var _this = this;
+      var _this = this,
+          rootContainerID = window.app.rootContainerID;
       this.collection.fetch({
-        container: "_encryptrIndex",
+        container: rootContainerID,
         success: function(entries) {
           if (entries.length === 0) {
             _this.addAll();
           }
         }, error: function(err) {
-          window.app.session.create("_encryptrIndex", function(err, container) {
+          window.app.session.create(rootContainerID, function(err, container) {
             if (err) {
               // OK. This is a bit more serious...
               console.log(err);
