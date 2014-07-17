@@ -24,11 +24,16 @@
       event.stopPropagation();
       event.preventDefault();
       this.dismiss();
-      var typeModel = $(event.target).data("model");
+      var typeModel = $(event.target).data("model"),
+          model;
+      if (typeModel === "FolderModel") {
+        model = new window.app.FolderModel();
+      }
+      else {
+        model = new window.app.EntryModel(new window.app.types[typeModel]());
+      }
       window.app.navigator.pushView(window.app.EditView, {
-        model: new window.app.EntryModel(
-          new window.app.types[typeModel]()
-        )
+        model: model
       }, window.app.defaultEffect);
     },
     dismiss: function() {

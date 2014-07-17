@@ -85,11 +85,15 @@
             }
             // Set up MainView
             window.app.mainView = new window.app.MainView().render();
-            // Push a ListView 
-            window.app.navigator.pushView(
-              window.app.EntriesView,
-              { collection: new window.app.EntriesCollection() },
-              window.app.noEffect
+            // Push a ListView
+            var rootEntriesCollection = new window.app.EntriesCollection(null,{
+              containerID: window.app.rootContainerID
+            });
+            window.app.navigator.pushView(window.app.EntriesView,
+                                          {
+                                            collection: rootEntriesCollection
+                                          },
+                                          window.app.noEffect
             );
             $(".blocker").hide();
             window.app.loginView.dismiss();

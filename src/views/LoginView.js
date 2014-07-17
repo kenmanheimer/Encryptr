@@ -72,10 +72,12 @@
         });
         Backbone.Session = session;
         window.app.mainView = new window.app.MainView().render();
-        var entriesCollection = new window.app.EntriesCollection();
+        var rootEntriesCollection = new window.app.EntriesCollection(null, {
+          containerID: window.app.rootContainerID
+        });
         window.app.navigator.pushView(
           window.app.EntriesView,
-          { collection: entriesCollection },
+          { collection: rootEntriesCollection },
           window.app.noEffect
         );
         _this.dismiss();
