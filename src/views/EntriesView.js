@@ -25,6 +25,12 @@
     },
     render: function() {
       this.$el.html(window.tmpl["entriesView"]({}));
+      window.app.mainView.on("deleteentry",
+                             this.deleteButton_clickHandler,
+                             this);
+      window.app.mainView.once("editentry",
+                               this.editButton_clickHandler,
+                               this);
       return this;
     },
     addAll: function () {
@@ -82,16 +88,62 @@
           });
         }
       });
+
+      window.app.mainView.on("deleteentry",
+                             _this.deleteButton_clickHandler,
+                             _this);
+      window.app.mainView.on("editentry",
+                             _this.editButton_clickHandler,
+                             _this);
+
+      if (_this.collection.theFolder) {
+        $(".nav .back-btn").removeClass("hidden");
+        $(".nav .edit-btn.right").removeClass("hidden");
+        $(".nav .delete-btn").removeClass("hidden");
+        window.app.mainView.setTitle(_this.collection.theFolder.get("label"));
+      }
+      $(".nav .menu-btn").removeClass("hidden");
+
     },
     viewDeactivate: function(event) {
-      // ...
+      if (this.collection.theFolder) {
+        $(".nav .back-btn").addClass("hidden");
+        $(".nav .btn.right").addClass("hidden");
+        $(".nav .delete-btn").addClass("hidden");
+      }
+      window.app.mainView.setTitle("Encryptr");
+      $(".nav .menu-btn").removeClass("hidden");
+      $(".nav .add-btn.right").removeClass("hidden");
+      window.app.mainView.off("editentry", null, null);
+      window.app.mainView.off("deleteentry", null, null);
+    },
+    editButton_clickHandler: function(event) {
+      window.app.navigator.pushView(
+        window.app.EditView,
+        {model: this.collection.theFolder},
+        window.app.noEffect
+      );
+    },
+    deleteButton_clickHandler: function(event) {
+      var _this = this;
+      window.app.dialogConfirmView.show({
+        title: "Confirm delete",
+        subtitle: "Delete this folder and contents?"
+      }, function(event) {
+        console.log(event);
+        if (event.type === "dialogAccept") {
+          _this.collection.theFolder.destroy();
+          window.app.navigator.popView(window.app.defaultPopEffect);
+        }
+      });
     },
     close: function() {
       _.each(this.subViews, function(view) {
         view.close();
       });
       this.remove();
-    }
+    },
+    which: "EntriesView"
   });
   Encryptr.prototype.EntriesView = EntriesView;
 
@@ -114,18 +166,30 @@
       return this;
     },
     a_clickHandler: function(event) {
-      var _this = this;
+      var _this = this,
+          folderId = _this.model.get("folderId");
       if (!$(".menu").hasClass("dismissed") ||
             !$(".addMenu").hasClass("dismissed")) {
         return;
       }
-      window.app.navigator.pushView(window.app.EntryView, {
-        model: _this.model
-      }, window.app.defaultEffect);
+      if (folderId) {
+        _this.model.fetch();
+        window.app.navigator.pushView(
+          window.app.EntriesView,
+          {collection: _this.model.contents},
+          window.app.noEffect
+        );
+      }
+      else {
+        window.app.navigator.pushView(window.app.EntryView, {
+          model: _this.model
+        }, window.app.defaultEffect);
+      }
     },
     close: function() {
       this.remove();
-    }
+    },
+    which: "EntriesListItemView"
   });
   Encryptr.prototype.EntriesListItemView = EntriesListItemView;
 

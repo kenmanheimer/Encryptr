@@ -59,6 +59,7 @@
       collection.model = FolderModel;
       collection.theFolder = this;
       this.contents = collection;
+      this.set("folderID", folderID);
       return collection;
     },
     destroy: function (options) {
